@@ -27,6 +27,11 @@ class TodosController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'state' => ['required', 'regex:/0|1/'],
+        ]);
+
         $todo = new Todo();
         $todo->title = $request->title;
         $todo->state = $request->state;
@@ -56,6 +61,11 @@ class TodosController extends Controller
      */
     function update(Request $request, string $id): JsonResponse
     {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'state' => ['required', 'regex:/0|1/'],
+        ]);
+
         $todo = Todo::find($id);
         $todo->title = $request->title;
         $todo->state = $request->state;
