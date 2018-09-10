@@ -4,10 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Todo;
+use App\Services\TodoService;
 
 class TodosController extends Controller
 {
+
+    /**
+     * @var todoService
+     */
+    protected $todoService;
+
+    /**
+     * TodosController constructor.
+     * @param TodoService $todoService
+     */
+    public function __construct(TodoService $todoService)
+    {
+        $this->todoService = $todoService;
+    }
+
     /**
      * Todoの一覧を取得する
      *
@@ -15,7 +30,7 @@ class TodosController extends Controller
      */
     function index(): JsonResponse
     {
-        $todos = Todo::all();
+        $todos = $this->todoService->fetchTodos();
         return response()->json([$todos]);
     }
 
@@ -32,10 +47,11 @@ class TodosController extends Controller
             'state' => ['required', 'regex:/0|1/'],
         ]);
 
-        $todo = new Todo();
-        $todo->title = $request->title;
-        $todo->state = $request->state;
-        $todo->save();
+        $params = [
+            'title' => $request->title,
+            'state' => $request->state
+        ];
+        $this->todoService->saveTodo($params);
         return response()->json();
     }
 
@@ -48,7 +64,8 @@ class TodosController extends Controller
      */
     function show(Request $request, string $id): JsonResponse
     {
-        $todo = Todo::find($id);
+        $params = ['id' => $id];
+        $todo = $this->todoService->findTodo($params);
         return response()->json($todo);
     }
 
@@ -66,10 +83,13 @@ class TodosController extends Controller
             'state' => ['required', 'regex:/0|1/'],
         ]);
 
-        $todo = Todo::find($id);
-        $todo->title = $request->title;
-        $todo->state = $request->state;
-        $todo->save();
+        $params = [
+            'id' => $id,
+            'title' => $request->title,
+            'state' => $request->state
+
+        ];
+        $this->todoService->updateTodo($params);
         return response()->json();
     }
 
@@ -82,8 +102,8 @@ class TodosController extends Controller
      */
     function destroy(Request $request, string $id): JsonResponse
     {
-        $todo = ToDo::find($id);
-        $todo->delete();
+        $params = ['id' => $id];
+        $this->todoService->destroyTodo($params);
         return response()->json();
     }
 }
