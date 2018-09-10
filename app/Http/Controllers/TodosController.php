@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\TodoService;
+use App\Http\Requests\TodoRequest;
+
 
 class TodosController extends Controller
 {
@@ -37,16 +39,11 @@ class TodosController extends Controller
     /**
      * Todoを登録する
      *
-     * @param Request $request
+     * @param TodoRequest $request
      * @return JsonResponse
      */
-    function store(Request $request): JsonResponse
+    function store(TodoRequest $request): JsonResponse
     {
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'state' => ['required', 'regex:/0|1/'],
-        ]);
-
         $params = [
             'title' => $request->title,
             'state' => $request->state
@@ -72,17 +69,12 @@ class TodosController extends Controller
     /**
      * Todoを更新する
      *
-     * @param Request $request
+     * @param TodoRequest $request
      * @param string $id
      * @return JsonResponse
      */
-    function update(Request $request, string $id): JsonResponse
+    function update(TodoRequest $request, string $id): JsonResponse
     {
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'state' => ['required', 'regex:/0|1/'],
-        ]);
-
         $params = [
             'id' => $id,
             'title' => $request->title,
