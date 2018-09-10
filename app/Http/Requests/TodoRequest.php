@@ -25,7 +25,7 @@ class TodoRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'state' => ['required', 'regex:/0|1/'],
+            'state' => ['required', 'regex:/^[0|1]$/'],
         ];
     }
 }
