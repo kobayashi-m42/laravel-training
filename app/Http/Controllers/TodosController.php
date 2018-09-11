@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Services\TodoService;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\TodoRequest;
-
 
 class TodosController extends Controller
 {
@@ -30,7 +29,7 @@ class TodosController extends Controller
      *
      * @return JsonResponse
      */
-    function index(): JsonResponse
+    public function index(): JsonResponse
     {
         $todos = $this->todoService->fetchTodos();
         return response()->json([$todos]);
@@ -42,7 +41,7 @@ class TodosController extends Controller
      * @param TodoRequest $request
      * @return JsonResponse
      */
-    function store(TodoRequest $request): JsonResponse
+    public function store(TodoRequest $request): JsonResponse
     {
         $params = [
             'title' => $request->title,
@@ -59,7 +58,7 @@ class TodosController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    function show(Request $request, string $id): JsonResponse
+    public function show(Request $request, string $id): JsonResponse
     {
         $params = ['id' => $id];
         $todo = $this->todoService->findTodo($params);
@@ -73,10 +72,10 @@ class TodosController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    function update(TodoRequest $request, string $id): JsonResponse
+    public function update(TodoRequest $request, string $id): JsonResponse
     {
         $params = [
-            'id' => $id,
+            'id'    => $id,
             'title' => $request->title,
             'state' => $request->state
 
@@ -92,7 +91,7 @@ class TodosController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    function destroy(Request $request, string $id): JsonResponse
+    public function destroy(Request $request, string $id): JsonResponse
     {
         $params = ['id' => $id];
         $this->todoService->destroyTodo($params);
