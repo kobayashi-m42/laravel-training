@@ -71,5 +71,4 @@ class TodoService
         $todo = Todo::find($params['id']);
         $todo->delete();
     }
-
 }
